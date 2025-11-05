@@ -136,6 +136,44 @@ cron.schedule('* * * * *', async () => {
   }
 });
 
+// Health check and debug endpoint
+app.get('/api/health', async (req, res) => {
+  try {
+    const health = {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      env: {
+        supabaseUrl: process.env.SUPABASE_URL ? '✅ Set' : '❌ Missing',
+        supabaseKey: process.env.SUPABASE_SERVICE_KEY ? '✅ Set' : '❌ Missing',
+        frontendUrl: process.env.FRONTEND_URL || '❌ Not set',
+        emailService: process.env.EMAIL_SERVICE || '❌ Not set'
+      }
+    };
+
+    // Test Supabase connection
+    try {
+      const { data, error } = await supabase.from('photos').select('count').limit(1);
+      health.supabase = {
+        database: error ? `❌ Error: ${error.message}` : '✅ Connected',
+      };
+
+      // Check storage buckets
+      const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
+      if (!bucketsError) {
+        health.supabase.buckets = buckets.map(b => b.name);
+      } else {
+        health.supabase.storage = `❌ Error: ${bucketsError.message}`;
+      }
+    } catch (err) {
+      health.supabase = { error: err.message };
+    }
+
+    res.json(health);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Routes
 app.post('/api/schedule', upload.single('video'), (req, res) => {
   try {
@@ -326,14 +364,20 @@ app.delete('/api/scheduled-videos/:id', async (req, res) => {
  */
 app.post('/api/photos/upload', photoUpload.single('photo'), async (req, res) => {
   try {
+    console.log('📸 Photo upload request received');
     const { caption, alt } = req.body;
 
     if (!req.file) {
+      console.log('❌ No file in request');
       return res.status(400).json({ error: 'No photo uploaded' });
     }
 
+    console.log(`📁 File: ${req.file.originalname}, Size: ${req.file.size} bytes`);
+
     const fileExt = path.extname(req.file.originalname);
     const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExt}`;
+
+    console.log(`☁️ Uploading to Supabase storage: ${fileName}`);
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('photos')
@@ -344,9 +388,14 @@ app.post('/api/photos/upload', photoUpload.single('photo'), async (req, res) => 
       });
 
     if (uploadError) {
-      console.error('Supabase upload error:', uploadError);
-      return res.status(500).json({ error: 'Failed to upload to storage' });
+      console.error('❌ Supabase upload error:', uploadError);
+      return res.status(500).json({ 
+        error: 'Failed to upload to storage',
+        details: uploadError.message 
+      });
     }
+
+    console.log('✅ File uploaded to storage');
 
     const { data: { publicUrl } } = supabase.storage
       .from('photos')
@@ -354,6 +403,8 @@ app.post('/api/photos/upload', photoUpload.single('photo'), async (req, res) => 
 
     const photoCaption = caption || req.file.originalname.split('.')[0];
     const photoAlt = alt || 'Special Moment';
+
+    console.log('💾 Saving metadata to database...');
 
     const { data: dbData, error: dbError } = await supabase
       .from('photos')
@@ -370,10 +421,15 @@ app.post('/api/photos/upload', photoUpload.single('photo'), async (req, res) => 
       .single();
 
     if (dbError) {
-      console.error('Database insert error:', dbError);
+      console.error('❌ Database insert error:', dbError);
       await supabase.storage.from('photos').remove([fileName]);
-      return res.status(500).json({ error: 'Failed to save photo metadata' });
+      return res.status(500).json({ 
+        error: 'Failed to save photo metadata',
+        details: dbError.message 
+      });
     }
+
+    console.log('✅ Photo upload complete!');
 
     const newPhoto = {
       id: dbData.id,
