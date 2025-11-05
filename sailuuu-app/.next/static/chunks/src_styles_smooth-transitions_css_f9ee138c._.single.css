@@ -1,0 +1,83 @@
+/* [project]/src/styles/smooth-transitions.css [app-client] (css) */
+* {
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.poem-text, .our-story-container, .todo-list, div[style*="overflow-y: auto"], div[style*="overflow: auto"], div[style*="overflow-y: scroll"], div[style*="overflow: scroll"] {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.animate-gpu {
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+@keyframes smoothFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes smoothFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+main {
+  animation: .5s ease-out smoothFadeIn;
+}
+
+button, a, .nav-link, .btn, [role="button"] {
+  transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), background-color .3s, color .3s, box-shadow .3s;
+}
+
+img {
+  transition: transform .5s, filter .5s;
+}
+
+.hover-smooth {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+
+.hover-smooth:hover {
+  transform: translateY(-3px);
+}
+
+.scale-on-hover {
+  transition: transform .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+
+.scale-on-hover:hover {
+  transform: scale(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, :before, :after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/*# sourceMappingURL=src_styles_smooth-transitions_css_f9ee138c._.single.css.map*/

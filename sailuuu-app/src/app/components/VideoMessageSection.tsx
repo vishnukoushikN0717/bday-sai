@@ -24,7 +24,7 @@ export default function VideoMessageSection() {
   const loadMessages = useCallback(async () => {
     try {
       // First try to load from backend
-      const response = await fetch('http://localhost:3001/api/messages');
+      const response = await fetch('https://backend-gold-rho-63.vercel.app/api/messages');
 
       if (response.ok) {
         const messages = await response.json();
@@ -63,7 +63,7 @@ export default function VideoMessageSection() {
   const checkDelivery = useCallback(async () => {
     try {
       // Fetch the latest messages from the backend
-      const response = await fetch('http://localhost:3001/api/messages');
+      const response = await fetch('https://backend-gold-rho-63.vercel.app/api/messages');
 
       if (!response.ok) {
         throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
@@ -142,7 +142,7 @@ export default function VideoMessageSection() {
       }
 
       // Send to backend API
-      const response = await fetch('http://localhost:3001/api/schedule', {
+      const response = await fetch('https://backend-gold-rho-63.vercel.app/api/schedule', {
         method: 'POST',
         body: formData,
       });
@@ -181,7 +181,7 @@ export default function VideoMessageSection() {
   const handleDeleteMessage = useCallback(async (id: string) => {
     try {
       // Delete from backend
-      const response = await fetch(`http://localhost:3001/api/messages/${id}`, {
+      const response = await fetch(`https://backend-gold-rho-63.vercel.app/api/messages/${id}`, {
         method: 'DELETE',
       });
 

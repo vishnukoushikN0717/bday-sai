@@ -1,0 +1,49 @@
+/* [project]/src/app/components/FloatingHearts.css [app-client] (css) */
+@keyframes floatHeart {
+  0% {
+    opacity: 0;
+    transform: translate(0)scale(.3);
+  }
+
+  20% {
+    opacity: .8;
+    transform: translate(calc(var(--tx) * .3), calc(var(--ty) * .3)) scale(.6);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(calc(var(--tx) * .6), calc(var(--ty) * .6)) scale(.8);
+  }
+
+  80% {
+    opacity: .6;
+    transform: translate(calc(var(--tx) * .9), calc(var(--ty) * .9)) scale(.9);
+  }
+
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(1);
+    opacity: 0;
+  }
+}
+
+.floating-heart {
+  z-index: 100;
+  pointer-events: none;
+  filter: drop-shadow(0 0 5px #ff69b4b3);
+  font-size: 24px;
+  animation: 2s forwards floatHeart;
+  position: absolute;
+}
+
+.hearts-container {
+  pointer-events: none;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+/*# sourceMappingURL=src_app_components_FloatingHearts_css_f9ee138c._.single.css.map*/

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/app/components/FloatingHearts.css"],"sourcesContent":["@keyframes floatHeart {\r\n  0% {\r\n    transform: translate(0, 0) scale(0.3);\r\n    opacity: 0;\r\n  }\r\n\r\n  20% {\r\n    opacity: 0.8;\r\n    transform: translate(calc(var(--tx) * 0.3), calc(var(--ty) * 0.3)) scale(0.6);\r\n  }\r\n\r\n  50% {\r\n    opacity: 1;\r\n    transform: translate(calc(var(--tx) * 0.6), calc(var(--ty) * 0.6)) scale(0.8);\r\n  }\r\n\r\n  80% {\r\n    opacity: 0.6;\r\n    transform: translate(calc(var(--tx) * 0.9), calc(var(--ty) * 0.9)) scale(0.9);\r\n  }\r\n\r\n  100% {\r\n    transform: translate(var(--tx), var(--ty)) scale(1);\r\n    opacity: 0;\r\n  }\r\n}\r\n\r\n.floating-heart {\r\n  position: absolute;\r\n  font-size: 24px;\r\n  animation: floatHeart 2s forwards;\r\n  z-index: 100;\r\n  pointer-events: none;\r\n  filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.7));\r\n}\r\n\r\n.hearts-container {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  pointer-events: none;\r\n  z-index: 1000;\r\n  overflow: hidden;\r\n}"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;AA2BA;;;;;;;;;AASA"}}]
+}
