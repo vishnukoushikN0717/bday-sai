@@ -8,7 +8,7 @@ import AudioControls from "../../components/AudioControls";
 import ShootingStars from "../../components/ShootingStars";
 import "../../styles/love-entry.css";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://bday-sai-164p.vercel.app';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-gold-rho-63.vercel.app';
 
 export default function Love() {
   // State to store uploaded photos
